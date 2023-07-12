@@ -3,8 +3,7 @@ from flask import Flask
 def create_app():
     app = Flask(__name__)
 
-    @app.route("/")
-    def hello() :
-        return "hello, mybot!"
+    from mybot.views import iris_views
+    app.register_blueprint(iris_views.bp)
 
     return app
