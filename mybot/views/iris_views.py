@@ -16,19 +16,13 @@ def test() :
 
     return json_str
 
-
-
-
-
-
-
-@bp.route('/predict')
+@bp.route('/predict', methods=['POST'])
 def predict() :
-
-    # s_len = int(request.args.get("sepal_length"))
-    # s_wid = int(request.args.get("sepal_width"))
-    # p_len = int(request.args.get("petal_length"))
-    # p_wid= int(request.args.get("petal_width"))
+    data = request.get_json()
+    sepal_length = data["sepal_length"]
+    sepal_width = data["sepal_width"]
+    petal_length = data["petal_length"]
+    petal_width = data["petal_width"]
 
     from sklearn.datasets import load_iris
 
@@ -48,6 +42,11 @@ def predict() :
     rfc = RandomForestClassifier(max_depth=5, n_estimators=30)
     rfc.fit(trd, trt)
 
-    # pred_idx = rfc.predict([[s_len, s_wid, p_len, p_wid]])
+    pred_idx = rfc.predict([[sepal_length, sepal_width, petal_length, petal_width]])
+    result = target_names[pred_idx[0]]
 
-    return '{"data": "aaa", "status": "200"}'
+    result_dic = {
+        "result" : result
+    }
+
+    return json.dumps(result_dic)
